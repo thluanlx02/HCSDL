@@ -13,7 +13,7 @@ const EditProduct =({ isShowing, hide,handleInputChange,handleEditChange,product
                 </div>
                 <div className="modal-body">
                     <label className="mt-2">SoLo:</label>
-                    <input type="text" className="form-control" defaultValue={product.SoLo} name='SoLo' onChange={handleInputChange}/>
+                    <input type="text" className="form-control" readOnly defaultValue={product.SoLo} name='SoLo' onChange={handleInputChange}/>
                      {/*<div className="product-type mt-2" >
                     <p >Type:</p>
 
@@ -34,7 +34,7 @@ const EditProduct =({ isShowing, hide,handleInputChange,handleEditChange,product
                     
                     </div> */}
                     <label className="mt-2">MaNguyenLieu:</label>
-                    <input type="text" className="form-control" defaultValue={product.MaNguyenLieu} name='MaNguyenLieu' onChange={handleInputChange}/>
+                    <input type="text" className="form-control" readOnly defaultValue={product.MaNguyenLieu} name='MaNguyenLieu' onChange={handleInputChange}/>
                     <label className="mt-2">SoLuong:</label>
                     <input type ="number" className="form-control" defaultValue={product.SoLuong} name="SoLuong" onChange={handleInputChange}/>
                     <label className="mt-2">DonGia:</label>

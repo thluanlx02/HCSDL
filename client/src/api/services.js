@@ -42,9 +42,9 @@ const updateProduct=(data,callback)=>{
   .then(res=>{
     callback(res.data.message);
   })
-
   .catch(err=>{
-    if (err) callback(err.response.data.message)
+    if (err) {console.log({err})
+    callback(err.response.data.message);}
   })
 }
  

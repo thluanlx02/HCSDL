@@ -22,7 +22,7 @@ async function getCustomers() {
         console.log(error);
     }
 }
-async function addCustomer(product) {
+async function addCustomer(product,fun) {
     try {
         console.log(product);
 
@@ -35,7 +35,10 @@ async function addCustomer(product) {
             + product.MatKhau + "','"
             + product.TenNguoiSuDung + "','"
             + product.DiemThuong + "','"
-            + product.SoHuuBoi +  "')");
+            + product.SoHuuBoi +  "')"  , (err, result) => {
+                if(err) fun(err,err.message)
+                else fun(err,null)
+             });
         return insertProduct.recordsets;
     }
     catch (err) {
@@ -44,11 +47,14 @@ async function addCustomer(product) {
     }
     
 }
-async function deleteCustomer(MSTK) {
+async function deleteCustomer(MSTK,fun) {
     try {
         let pool = await sql.connect(config);
         let insertProduct = await pool.request().query( "DELETE FROM TaiKhoanKhachHang "
-        + "WHERE MaSoTaiKhoan='"+MSTK.id+"'");
+        + "WHERE MaSoTaiKhoan='"+MSTK.id+"'"  , (err, result) => {
+            if(err) fun(err,err.message)
+            else fun(err,null)
+         });
 
         return insertProduct.recordsets;
     }
@@ -56,7 +62,7 @@ async function deleteCustomer(MSTK) {
         console.log(err);
     }
 }
-async function editCustomer(product) {
+async function editCustomer(product,fun) {
     try {
         console.log(product);
         let pool = await sql.connect(config);
@@ -66,7 +72,10 @@ async function editCustomer(product) {
                   +   "TenNguoiSuDung='"+product.TenNguoiSuDung+"',"
                   +   "DiemThuong='"+product.DiemThuong+"',"
                   +   "SoHuuBoi='"+product.SoHuuBoi+"'"
-                  + "WHERE MaSoTaiKhoan='"+product.MaSoTaiKhoan+"'");
+                  + "WHERE MaSoTaiKhoan='"+product.MaSoTaiKhoan+"'"  , (err, result) => {
+                    if(err) fun(err,err.message)
+                    else fun(err,null)
+                 });
 
         return insertProduct.recordsets;
     }

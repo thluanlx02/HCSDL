@@ -7,7 +7,6 @@ import { useLocation } from 'react-router-dom';
 function Sidebar(props){
     const location = useLocation();
     const homeClass = location.pathname === "/" ? "active" : "";
-
     const customer = location.pathname.match(/^\/customer/) ? "active" : "";
     return (
         <div className="sidebar">

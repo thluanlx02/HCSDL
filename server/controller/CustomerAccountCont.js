@@ -11,25 +11,38 @@ module.exports = function (app) {
     app.post('/insert/customer', function (req, res) {
 
         let order = { ...req.body }
-        customer.addCustomer(order).then(data => {
-          
-            res.status(501).send({error:"Ko the insert"});
+        customer.addCustomer(order, function(err,mes){
+            if(mes){
+                res.status(500).send({message:mes})
+            }
+            else {
+                res.status(201).send({message:"Success"})
+            }
         })
     })
     app.post('/delete/customer', (req, res) => {
         console.log(req.body);
 
-        customer.deleteCustomer(req.body).then(data => {
-            res.status(201).json(data);
+        customer.deleteCustomer(req.body, function(err,mes){
+            if(mes){
+                res.status(500).send({message:mes})
+            }
+            else {
+                res.status(201).send({message:"Success"})
+            }
         })
     });
 
     app.post('/edit/customer', (req, res) => {
         console.log(req.body);
         let order = { ...req.body }
-        customer.editCustomer(order).then(data => {
-            res.status(201).json(data);
-
+        customer.editCustomer(order, function(err,mes){
+            if(mes){
+                res.status(500).send({message:mes})
+            }
+            else {
+                res.status(201).send({message:"Success"})
+            }
         })
     });
 
