@@ -55,7 +55,7 @@ function Table(){
 
                                 <tr key={index} >
                                     <th scope="row">{index + 1}</th>
-                                    <td>{product.ĐuocatBoi}</td>
+                                    <td>{product.ĐuocDatBoi}</td>
                                     <td>{product.TenNguoiSuDung}</td>
                                     <td>{product.SoDonHang}</td>
                                 </tr>
