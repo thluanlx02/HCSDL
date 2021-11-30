@@ -39,7 +39,7 @@ function Table(){
                 <input id="num" type="number" min="1" required defaultValue='1'/>
                 <button onClick={handleClick}>Send</button>
             </div>
-            <div className="body-table" style={{minWidth:'250px',marginTop:"24px"}}>
+            <div className="body-table" style={{minHeight:'600px',marginTop:"24px"}}>
                      <table className="table table-bordered" data-aos="fade-up" style={{}} >
                         <thead style={{ position: 'sticky', top: '0', overflowY: 'hidden', backgroundColor: '#eee' }}>
                             <tr >
@@ -66,10 +66,10 @@ function Table(){
                     </div>
                     <div>
                 <h5>Function</h5>
-                <input id="num2" type="text" min="1" defaultValue="1" required/>
+                <input id="num2" type="number" min="1" defaultValue="1" required/>
                 <button type="submit" onClick={handleClickFunc2}>Send</button>
             </div>
-            <div className="body-table" style={{minWidth:'250px',marginTop:"24px"}}>
+            <div className="body-table" style={{minHeight:'600px',marginTop:"24px"}}>
                      <table className="table table-bordered" data-aos="fade-up" style={{}} >
                         <thead style={{ position: 'sticky', top: '0', overflowY: 'hidden', backgroundColor: '#eee' }}>
                             <tr >

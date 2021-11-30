@@ -15,6 +15,9 @@
     align-items: center;
     background-color: white;
     border-bottom: 2px solid #eee;
+    position: sticky;
+    top:0;
+    z-index: 10;
 }
 
 #product .header .avatar {
@@ -29,6 +32,7 @@
 .manage-product{
     width: calc(100% - 300px);
     margin-left: 300px;
+    background-color: aliceblue;
 }
 .list-activity, .filter-value {
     display: flex;

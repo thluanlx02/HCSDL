@@ -7,3 +7,15 @@
     min-height: 500px;
     
 }
+#table-f select{
+    padding:2px
+}
+
+#table-f button {
+    width:100px;
+
+    background-color: #434E6E;
+    color: white;
+    border: none;
+    padding: 4px 0;
+}
