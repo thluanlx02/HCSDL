@@ -8,6 +8,32 @@ module.exports = function (app) {
             response.json(data[0]);
         })
     })
+    app.get('/get/manl', (request, response) => {
+        product.getMNL().then((data) => {
+            response.json(data[0]);
+        })
+    })
+    app.get('/get/loaiNL', (request, response) => {
+        product.getLoaiNL().then((data) => {
+            response.json(data[0]);
+        })
+    })
+    app.post('/get/tienNL', (request, response) => {
+        let order = { ...request.body }
+        console.log("order",order);
+
+        product.getTienNL(order).then((data) => {
+            response.json(data[0]);
+        })
+    })
+    app.post('/get/func2', (request, response) => {
+        let order = { ...request.body }
+        console.log("order",order);
+
+        product.func2(order).then((data) => {
+            response.json(data[0]);
+        })
+    })
     app.post('/insert/product', function (req, res) {
         let order = { ...req.body }
         product.addProduct(order,function(err,mes){
@@ -18,15 +44,6 @@ module.exports = function (app) {
                 res.status(201).send({message:"Success"})
             }
         })
-
-
-
-        // product.addProduct(order)
-        // .then((err,data) => {
-        //     if (err) res.status(201).json({message:"Success"})
-        //     else res.status(500).json({
-        //         message: "Failer"
-        //     });
         
     })
     app.post('/delete/product', (req, res) => {

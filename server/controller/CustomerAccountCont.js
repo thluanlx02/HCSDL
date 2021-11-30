@@ -8,6 +8,23 @@ module.exports = function (app) {
             response.json(data[0]);
         })
     })
+    app.post('/get/cus_proc1', (request, response) => {
+        let order = { ...request.body }
+        console.log("order",order);
+
+        customer.Cus_Procedure1(order).then((data) => {
+            response.json(data[0]);
+            
+        })
+    })    
+    app.post('/get/cus_proc2', (request, response) => {
+        let order = { ...request.body }
+        console.log("order",order);
+
+        customer.Cus_Procedure2(order).then((data) => {
+            response.json(data[0]);
+        })
+    })
     app.post('/insert/customer', function (req, res) {
 
         let order = { ...req.body }

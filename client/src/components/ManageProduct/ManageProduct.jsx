@@ -7,6 +7,8 @@ import {
     updateProduct
 } from '../../api/services'
 import { ProductManagement } from '../../context/ProductManagement';
+
+
 import Alert from '@mui/material/Alert';
 import React, { useContext, useEffect, useState } from 'react';
 import AddProduct from "./AddProduct/AddProduct"
@@ -25,8 +27,10 @@ import DialogActions from '@mui/material/DialogActions';
 // import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Link } from 'react-router-dom';
+import Table from './Function1'
 
 function ManageProduct() {
+
     const [data, setData] = useState({
         SoLo: '',
         MaNguyenLieu: '',
@@ -39,11 +43,12 @@ function ManageProduct() {
         MaNguyenLieu: ''
     });
     const [mess, setMess] = useState('Empty')
+    const [error,setError]=useState('')
     const [open, setOpen] = useState(false);
     const [filter, setFilter] = useState('');
     const [filterSearch, setFilterSearch] = useState('');
     const [page, setPage] = useState(1);
-    const { productList, setProductList } = useContext(ProductManagement);
+    const { productList, setProductList,manlList } = useContext(ProductManagement);
     const { isShowing, toggle } = useModal();
     const [isShowingEditModal, setIsShowingEditModal] = useState(false);
     let num = productList ? productList.length : 0;
@@ -70,6 +75,21 @@ function ManageProduct() {
             [name]: value,
 
         });
+        console.log(data);
+    }
+    const toogleClose =()=>{
+        toggle();
+        setError('')
+    }
+    const toogleOpen =()=>{
+        setData({
+            SoLo: '',
+            MaNguyenLieu: '',
+            SoLuong: '',
+            DonGia: '',
+        })
+        toggle();
+        setError('')
     }
     const handleClickOpen = (a, b) => {
         console.log(a, b);
@@ -125,12 +145,20 @@ function ManageProduct() {
         setIsShowingEditModal(!isShowingEditModal);
     }
 
-    const callB = () => {
-        toggle();
-        createNewProduct(data, setMess);
-        setTimeout(() =>
-            requireProductList(setProductList), 100)
-
+    const callB = (e) => {
+        if (data.SoLo === '' ||data.SoLuong === '' ||data.MaNguyenLieu === '' ||data.DonGia === '' ){
+            setError("Please fill out all atribute")
+            console.log("rõng");
+        }
+        else{
+            toggle();
+            setError('')
+            createNewProduct(data, setMess);
+            setTimeout(() =>
+                requireProductList(setProductList), 100)
+    
+        }
+       
     }
     const handleChangeSearch = (event) => {
         const target = event.target;
@@ -198,7 +226,7 @@ function ManageProduct() {
                 </div>
                 <div className="list-activity">
                     <h2>Nguyên Liệu Nhập</h2>
-                    <div onClick={toggle}><i className="far fa-plus-square"></i> <h4>Add New</h4></div>
+                    <div onClick={toogleOpen}><i className="far fa-plus-square"></i> <h4>Add New</h4></div>
                 </div>
                 <div className="filter-value">
 
@@ -274,14 +302,19 @@ function ManageProduct() {
                     {(filterSearch.replace(/\s/g, '') === "") && <Stack spacing={2} style={{ alignItems: 'center' }}>
                         <Pagination count={numPage} color="primary" page={page} onChange={handleChangePage} />
                     </Stack>}
+            
+
                 </div>
+                <Table />
                 <div className="footer"><p>@CoppyRight2021</p></div>
             </div>
             <AddProduct
                 isShowing={isShowing}
-                hide={toggle}
+                hide={toogleClose}
                 callB={callB}
                 handleInputChange={handleInputChange}
+                manlList={manlList}
+                error={error}
             />
             <EditProduct
                 isShowing={isShowingEditModal}
@@ -304,6 +337,7 @@ function ManageProduct() {
                     <Button onClick={handelSubmitDelete}>Agree</Button>
                 </DialogActions>
             </Dialog>
+
         </div>
     )
 }
