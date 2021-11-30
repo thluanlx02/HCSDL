@@ -22,6 +22,48 @@ async function getProducts() {
         console.log(error);
     }
 }
+async function getMNL() {
+    try {
+        let pool = await sql.connect(config);
+        let products = await pool.request().query("SELECT MaNguyenLieu,Ten from NguyenLieu ");
+        return products.recordsets;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+async function getLoaiNL() {
+    try {
+        let pool = await sql.connect(config);
+        let products = await pool.request().query("SELECT DISTINCT Loai from NguyenLieu ");
+        return products.recordsets;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+async function getTienNL(data) {
+    try {
+        let pool = await sql.connect(config);
+        let query = "EXEC TopPrice @num='"+data.num+"', @type='"+data.type+"'"
+        let products = await pool.request().query(query);
+        return products.recordsets;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+async function func2(data) {
+    try {
+        let pool = await sql.connect(config);
+        let query = "EXEC TopImportGoods @timeA='"+data.timeA+"', @timeB='"+data.timeB+"',@num='"+data.num+"'"
+        let products = await pool.request().query(query);
+        return products.recordsets;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
 async function addProduct(product,fun) {
     try {
 
@@ -89,6 +131,10 @@ module.exports = {
     getProducts: getProducts,
     addProduct: addProduct,
     deleteProduct: deleteProduct,
-    editProduct: editProduct
+    editProduct: editProduct,
+    getMNL: getMNL,
+    getLoaiNL: getLoaiNL,
+    getTienNL: getTienNL,
+    func2:func2
 }
 

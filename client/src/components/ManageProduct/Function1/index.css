@@ -1,0 +1,21 @@
+#table-f {
+    width: 90%;
+    margin: 0 auto;
+    padding-bottom: 40px;
+    padding-top: 24px;;
+    border-top:2px solid black;
+    min-height: 500px;
+    
+}
+#table-f select{
+    padding:2px
+}
+
+#table-f button {
+    width:100px;
+
+    background-color: #434E6E;
+    color: white;
+    border: none;
+    padding: 4px 0;
+}

@@ -11,14 +11,74 @@ const requireProductList = callback =>{
       })
       .catch(error => console.log(error));
 };
+const requireManlList = callback =>{
+  axios.get(url + 'get/manl')
+    .then(res => {
+      const data = res.data;
+      console.log("get data:",data);
+      callback(data);
+    })
+    .catch(error => console.log(error));
+};
+const requireLoaiNLList = callback =>{
+  axios.get(url + 'get/loaiNL')
+    .then(res => {
+      const data = res.data;
+      console.log("get data:",data);
+      callback(data);
+    })
+    .catch(error => console.log(error));
+};
+const requiretTienNLList = (data,callback) =>{
+  console.log("send data",data);
+  axios.post(url + 'get/tienNL',data)
+    .then(res => {
+      const data = res.data;
+      console.log("get data:",data);
+      callback(data);
+    })
+    .catch(error => console.log(error));
+};
+const requireFunc2List = (data,callback) =>{
+  console.log("send data",data);
+  axios.post(url + 'get/func2',data)
+    .then(res => {
+      const data = res.data;
+      console.log("get data:",data);
+      callback(data);
+    })
+    .catch(error => console.log(error));
+};
+const requireCus_Procedure1 = (data,callback) =>{
+  console.log("send data",data);
+  axios.post(url + 'get/cus_proc1',data)
+    .then(res => {
+      const data = res.data;
+      console.log("get data:",data);
+      callback(data);
+    })
+    .catch(error => console.log(error));
+};
+const requireCus_Procedure2 = (data,callback) =>{
+  console.log("send data",data);
+  axios.post(url + 'get/cus_proc2',data)
+    .then(res => {
+      const data = res.data;
+      console.log("get data:",data);
+      callback(data);
+    })
+    .catch(error => console.log(error));
+};
 
 const createNewProduct =(data,callback)=>{
+  console.log("data insert ",data);
   axios.post(url +'insert/product',data)
     .then(res=>{
       callback(res.data.message);
     })
 
     .catch(err=>{
+
       if (err) callback(err.response.data.message)
     })
 }
@@ -105,6 +165,12 @@ export {
   requireCustomerList,
   createNewCustomer,
   deleteCustomer,
-  updateCustomer
+  updateCustomer,
+  requireManlList,
+  requireLoaiNLList,
+  requiretTienNLList,
+  requireFunc2List,
+  requireCus_Procedure1,
+  requireCus_Procedure2
 
 };

@@ -5,7 +5,8 @@
     width: 100%;
     height: 200vh;
     top:0;
-    overflow:hidden
+    overflow:hidden;
+    z-index: 1000;
 }
 #modal-edit-product .modal-header .close {
     width:25px;

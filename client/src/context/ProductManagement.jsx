@@ -1,7 +1,8 @@
 import {useState, createContext, useEffect} from "react";
 import {
     requireProductList,
-    requireCustomerList
+    requireCustomerList,
+    requireManlList
 } from '../api/services';
 
 
@@ -11,11 +12,14 @@ export const ProductManagement = createContext();
 const ProductProvider = ({children}) => {
 
     const [productList, setProductList] = useState([]);
-    const [customerList,setCustomerList] =useState([])
+    const [customerList,setCustomerList] =useState([]);
+    const [manlList,setManlList] =useState([]);
+
 
     useEffect(() =>{
         requireProductList(setProductList)
         requireCustomerList(setCustomerList)
+        requireManlList(setManlList)
 
     }, []);
 
@@ -23,7 +27,9 @@ const ProductProvider = ({children}) => {
         productList,
         setProductList,
         customerList,
-        setCustomerList
+        setCustomerList,
+        manlList,
+        setManlList
     };
 
     return (

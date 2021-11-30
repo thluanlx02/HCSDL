@@ -5,7 +5,8 @@
     width: 100%;
     height: 200vh;
     top:0;
-    overflow:hidden
+    overflow:hidden;
+    z-index: 1000;
 }
 #modal-add-product .modal-header .close {
     width:25px;
@@ -18,7 +19,7 @@
 
 #modal-add-product .modal-content {
     position: absolute;
-    top:50px;
+    top:100px;
     left:calc((100vw - 500px)/2);
     width: 500px;
     height:auto;

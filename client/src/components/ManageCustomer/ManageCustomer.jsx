@@ -18,6 +18,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Alert from '@mui/material/Alert';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Link } from 'react-router-dom';
+import Table from './Function1'
 
 
 
@@ -271,6 +272,7 @@ function ManageCustomer() {
                         <Pagination count={numPage} color="primary" page={page} onChange={handleChangePage} />
                     </Stack>}
                 </div>
+                <Table/>
                 <div className="footer"><p>@CoppyRight2021</p></div>
             </div>
             <AddCustomer
