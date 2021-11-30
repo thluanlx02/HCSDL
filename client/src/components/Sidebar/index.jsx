@@ -8,6 +8,7 @@ function Sidebar(props){
     const location = useLocation();
     const homeClass = location.pathname === "/" ? "active" : "";
     const customer = location.pathname.match(/^\/customer/) ? "active" : "";
+    const food = location.pathname.match(/^\/food/) ? "active" : "";
     return (
         <div className="sidebar">
                 <ul>
@@ -15,6 +16,8 @@ function Sidebar(props){
                     <li className={homeClass}><Link to="/"><i className="far fa-chart-bar"></i>Product</Link></li>
                    
                     <li className={customer}><Link to="/customer"><i className="fas fa-users"></i>Customer</Link></li>
+
+                    <li className={food}><Link to="/food"><i className="fas fa-users"></i>Food</Link></li>
                 </ul>
             </div>
     )
