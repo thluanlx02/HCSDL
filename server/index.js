@@ -14,10 +14,12 @@ app.use('/api', router);
 
 const NhapNguyenLieu = require('./controller/NhapNguyenLieuCont')
 const CustomerAccount = require('./controller/CustomerAccountCont')
+const Food = require('./controller/foodController')
 
+Food(app)
 CustomerAccount(app)
 NhapNguyenLieu(app)
 
 app.listen(port, function () {
-    console.log('Server is running..');
+    console.log(`Server is running in port: ${port}`);
 });

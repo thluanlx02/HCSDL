@@ -1,0 +1,113 @@
+import React, { useState, useEffect } from 'react'
+import './CreateItem.css'
+import { toast } from 'react-toastify'
+import DescriptionIcon from "@material-ui/icons/Description";
+import StoreIcon from '@material-ui/icons/Store';
+import SpellcheckIcon from "@material-ui/icons/Spellcheck";
+import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
+import CategoryIcon from '@material-ui/icons/Category';
+import axios from 'axios';
+const url = 'http://localhost:4000/';
+const CreateItem = (props) => {
+    const { func } = props
+    const [category, setCategory] = useState([])
+    const [show, setShow] = useState()
+    const [product, setProduct] = useState({
+      name: '',
+      price: null,
+      description: '',
+      image: '',
+      quantity: null,
+      category: ''
+    })
+    const dataChangeImage = async (event) => {
+      try {
+        const formData = new FormData()
+        formData.append("file", event.target.files[0])
+        formData.append("upload_preset", "images")
+        await axios.post("https://api.cloudinary.com/v1_1/restaurant211/image/upload", formData)
+        .then((response) => { setProduct({ ...product, image: response.data.secure_url }) }) 
+    } catch(err) {
+      console.log(err)
+    }
+  }
+    const loadCategorys = async () => {
+      const result = await axios.get(url + "food/category");
+      setCategory(result.data.recordset);
+    };
+    useEffect(() => {
+      loadCategorys();
+    }, []);
+    const changeInput = (event) => {
+      event.preventDefault()
+      if(event.target.name === 'name') {
+        if (show) { setShow('') }
+      }
+      setProduct({ ...product, [event.target.name]: event.target.value});
+    }
+    const AddProduct = async (event) => {
+      event.preventDefault()
+      try {
+        const { name, price, description, image, quantity, category } = product;
+        await axios.post(url + "food/add", 
+        { name, price, description, image, quantity, category });
+        loadCategorys();
+        func();
+        toast.success('Add item successfully!', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+      });
+      } catch (e) {
+          setShow('The food name already exists!')
+          console.log(e)
+      }
+    }
+    return (
+        <div className="newProductContainer">
+          <form onSubmit={AddProduct} className="createProductForm" >
+            <div>
+              <SpellcheckIcon />
+              <input type="text" name="name" onChange={changeInput} placeholder="Item name" required />
+            </div>
+            {show ? <div className="text-danger textss">{show}</div> : null}
+            <div>
+              <AttachMoneyIcon />
+              <input type="number" onChange={changeInput} name="price" min="1" placeholder="Item price" required />
+            </div>
+            <div>
+              <StoreIcon />
+              <input type="number" onChange={changeInput} name="quantity" min="1" placeholder="Stock quantity" required />
+            </div>
+            <div>
+              <CategoryIcon />
+              <input type="text" name="category" value={product.category} onChange={changeInput} placeholder="Category" required />
+            </div>
+            <div>
+              <select onChange={changeInput} name="category" defaultValue={'DEFAULT'}>
+              <option value="DEFAULT" disabled="disabled">Or choose a category</option>
+              {category.map((item, index) => (
+              <option key={index} value={item.DanhMuc}>{item.DanhMuc}</option>
+              ))}
+            </select>
+            </div>
+            <div id="createProductFormFile">
+              <input required type="file" onChange={dataChangeImage} name="image" accept="image/*" multiple={false} />
+            </div>
+            <div>
+              <DescriptionIcon />
+              <textarea placeholder="Product description" name="description" onChange={changeInput} cols="30" rows="1">
+              </textarea>
+            </div>
+            <button id="createProductBtn" type="submit"> CREATE </button>
+          </form>
+        </div>
+    )
+}
+
+export default CreateItem
+ 
