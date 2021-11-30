@@ -1,0 +1,201 @@
+--------- CAU 1 -------------------
+-- CREATE OR ALTER PROC Insert_TaiKhoanKhachHang
+-- @MSTK VARCHAR(15),
+-- @TenTK VARCHAR(20),
+-- @MatKhau VARCHAR(15),
+-- @TenNguoiSuDung VARCHAR(10),
+-- @DiemThuong INT,
+-- @SoHuuBoi VARCHAR(15)
+-- AS
+-- BEGIN
+--     if EXISTS (SELECT TaiKhoanKhachHang.MaSoTaiKhoan FROM TaiKhoanKhachHang
+--                 WHERE TaiKhoanKhachHang.MaSoTaiKhoan = @MSTK)
+--         RAISERROR('MA SO TAI KHOAN DA TON TAI',16,1);
+--     else if NOT EXISTS (SELECT KhachHang.MaSoKhachHang FROM KhachHang
+--                         WHERE KhachHang.MaSoKhachHang = @SoHuuBoi)
+--         RAISERROR('MA SO KHACH HANG KHONG TON TAI',16,1);
+--     else
+--         INSERT INTO TaiKhoanKhachHang 
+--         VALUES(@MSTK, @TenTK, @MatKhau, @TenNguoiSuDung, @DiemThuong, @SoHuuBoi)
+-- END
+
+--------  CAU 2 ---------------------
+-- drop trigger dbo.check_password
+
+-- CREATE or ALTER TRIGGER check_password
+-- ON dbo.TaiKhoanKhachHang
+-- FOR INSERT, UPDATE
+-- AS
+-- BEGIN
+--     DECLARE @pass VARCHAR(15);
+--     SET @pass = (SELECT TOP 1 MatKhau FROM inserted);
+--     if (LEN(@pass) < 8)
+--     BEGIN
+--         RAISERROR(N'MẬT KHẨU CÓ ĐỘ DÀI TỐI THIỂU LÀ 8', 16, 1);
+--     END
+--     if (@pass NOT LIKE '%[a-zA-Z]%[0-9]%' AND @pass NOT LIKE '%[0-9]%[a-zA-Z]%')
+--     BEGIN
+--         RAISERROR( N'MẬT KHẨU PHẢI CÓ ÍT NHẤT 1 KÝ TỰ VÀ 1 KÝ TỰ SỐ', 16, 1);
+--     END
+--     if (@@ERROR = 0)
+--         COMMIT;
+--     ELSE
+--         ROLLBACK;
+-- END;
+
+-- drop TRIGGER add_bonus_after_payment
+
+-- CREATE or ALTER TRIGGER add_bonus_after_payment
+-- ON HoaDon
+-- FOR DELETE
+-- AS
+-- BEGIN
+--     DECLARE @STK_ThanhToan VARCHAR(15);
+--     SELECT @STK_ThanhToan = DuocThanhToanBoiTaiKhoan FROM deleted;
+--     if (@STK_ThanhToan IS NULL)
+--     BEGIN
+--         RAISERROR(N'KHÔNG BIẾT TÀI KHOẢN THANH TOÁN HÓA ĐƠN',16,1);
+--         ROLLBACK;
+--     END;
+--     else 
+--     BEGIN
+--         UPDATE TaiKhoanKhachHang
+--         SET DiemThuong = DiemThuong + 50
+--         WHERE TaiKhoanKhachHang.MaSoTaiKhoan = @STK_ThanhToan;
+--         COMMIT;
+--     END;
+-- END;
+
+-----------  CAU 3 -----
+-- drop proc dbo.number_of_orders_of_each_customer_in_ascendingOrder;
+
+-- CREATE PROC number_of_orders_of_each_customer_in_ascendingOrder
+--     @minimum_num_of_orders INT
+-- AS
+-- SELECT DonHang.DuocDatBoi, TaiKhoanKhachHang.TenNguoiSuDung, COUNT(DonHang.MaSoDonHang) AS [So don hang]
+-- FROM DonHang, TaiKhoanKhachHang
+-- WHERE TaiKhoanKhachHang.MaSoTaiKhoan = DonHang.DuocDatBoi
+-- GROUP BY DonHang.DuocDatBoi, TaiKhoanKhachHang.TenNguoiSuDung
+-- HAVING COUNT(DonHang.MaSoDonHang)>= @minimum_num_of_orders
+-- ORDER BY [So don hang];
+
+
+-- drop Proc List_of_Customers_with_bonus_greater_than;
+-- CREATE PROC List_of_Customers_with_bonus_greater_than
+--     @MinBonus INT
+-- AS
+-- SELECT MaSoTaiKhoan, TenNguoiSuDung, SoHuuBoi, DiemThuong FROM TaiKhoanKhachHang 
+-- WHERE TaiKhoanKhachHang.DiemThuong >= @MinBonus
+-- ORDER BY DiemThuong DESC;
+----------------------------------------------------------------
+-----------   CAU 4  ----------
+-- create or alter function dem_so_don_hang_cua_khach_hang_co_ma_so
+-- (@MSTK VARCHAR(15))
+-- returns INT
+-- AS
+-- BEGIN
+--     if (select count(MaSoTaiKhoan) from TaiKhoanKhachHang where MaSoTaiKhoan = @MSTK) = 0
+--     BEGIN
+--         RETURN -1;
+--     END
+--     DECLARE @ans INT;
+--     set @ans = (select count(DuocDatBoi) from DonHang where DuocDatBoi = @MSTK);
+--     return @ans;
+-- END;
+
+-- create function so_nguoi_co_diem_thuong_i
+-- (@maxBonus INT)
+-- RETURNS @table TABLE (
+--     [Muc diem] INT,
+--     [so luong] INT
+-- )
+-- AS
+-- BEGIN
+--     if (@maxBonus < 0)
+--     BEGIN
+--         RETURN;
+--     END
+--     DECLARE @count INT;
+--     DECLARE @num INT;
+--     SET @count = 0;
+--     WHILE @count <= @maxBonus
+--     BEGIN
+--         SET @num = (SELECT COUNT(DiemThuong) 
+--                     FROM TaiKhoanKhachHang 
+--                     WHERE DiemThuong = @count);
+--         INSERT INTO @table VALUES(@count, @num);
+--         SET @count = @count + 50;
+--     END
+--     RETURN;
+-- END;
+----------------------------------------------------------------
+-- SELECT * FROM ChiNhanh;
+-- insert into ChiNhanh values ('Dong Nam A', 'Hem 46 Bui Thi Xuan', NULL);
+-- insert into ChiNhanh values ('Gia Lai', '25 Nguyen Du', NULL);
+-- insert into ChiNhanh values ('Ho Chi Minh', '106 Ben Phu Dinh', NULL);
+-- insert into ChiNhanh values ('Thanh Hoa', '17 Duong Dat', NULL);
+-- insert into ChiNhanh values ('Nghe An', '19 Tren Doi', NULL);
+-- insert into ChiNhanh values ('America', '25 Wall Street', NULL);
+-- delete from ChiNhanh where ChiNhanh.MaChiNhanh LIKE '%';
+
+-- SELECT * FROM KhachHang;
+-- insert into KhachHang values ('MSKH1', 'Loc', '0349976559', 'loclepnvx@gmail.com');
+-- insert into KhachHang values ('MSKH2', 'Van', '0394356772', 'vannguyen2012002@gmail.com');
+-- insert into KhachHang values ('MSKH3', 'Phuc', '0985671234', 'liulostwitch@gmail.com');
+-- delete from KhachHang where KhachHang.MaSoKhachHang LIKE '%';
+
+-- SELECT MaSoTaiKhoan, DiemThuong FROM TaiKhoanKhachHang;
+-- SELECT * FROM TaiKhoanKhachHang;
+-- insert into TaiKhoanKhachHang values ('MSTK126', 'locga', 'LocAlo', 'Loc', 0, 'MSKH1');
+-- insert into TaiKhoanKhachHang values ('MSTK126', 'locga', 'LocAloEm', 'Loc', 0, 'MSKH1');
+-- insert into TaiKhoanKhachHang values ('MSTK23', 'locga', 'LocAloEm84', 'Loc', 0, 'MSKH1');
+-- insert into TaiKhoanKhachHang values ('MSTK124', 'vanpro', 'VanDepGai201', 'Van', 0, 'MSKH2');
+-- insert into TaiKhoanKhachHang values ('MSTK125', 'phucvip', 'PhucDepZai71', 'Phuc', 0, 'MSKH3');
+-- exec dbo.Insert_TaiKhoanKhachHang 'MSTK126', 'locga', 'LocAlo', 'Loc', 0, 'MSKH1';
+-- exec dbo.Insert_TaiKhoanKhachHang 'MSTK126', 'locga', 'LocAloEm', 'Loc', 0, 'MSKH1';
+-- exec dbo.Insert_TaiKhoanKhachHang 'MSTK123', 'locga', 'LocAloEm84', 'Loc', 0, 'MSKH1';
+-- exec dbo.Insert_TaiKhoanKhachHang 'MSTK124', 'vanpro', 'VanDepGai201', 'Van', 0, 'MSKH2';
+-- exec dbo.Insert_TaiKhoanKhachHang 'MSTK125', 'phucvip', 'PhucDepZai71', 'Phuc', 0, 'MSKH3';
+-- delete from TaiKhoanKhachHang;
+
+-- select * from DonHang;
+-- insert into DonHang values ('MDH1', 'return', 'MSTK123', 'Dong Nam A');
+-- insert into DonHang values ('MDH2', 'unbox', 'MSTK124', 'Gia Lai');
+-- insert into DonHang values ('MDH3', 'unbox', 'MSTK125', 'Ho Chi Minh');
+-- insert into DonHang values ('MDH4', 'broken', 'MSTK123', 'Thanh Hoa');
+-- insert into DonHang values ('MDH5', 'unbox', 'MSTK123', 'Nghe An');
+-- insert into DonHang values ('MDH6', 'unbox', 'MSTK124', 'America');
+-- delete from DonHang;
+
+-- select MaHoaDon, DuocThanhToanBoiTaiKhoan from HoaDon;
+-- select * from HoaDon;
+-- insert into HoaDon values ('MHD1', '10:27:45', 'MDH1', null, 'MST1', 'MSTK123');
+-- insert into HoaDon values ('MHD2', '18:45:12', 'MDH2', null, 'MST2', 'MSTK124');
+-- insert into HoaDon values ('MHD3', '09:48:20', 'MDH3', null, 'MST3', 'MSTK125');
+-- insert into HoaDon values ('MHD4', '23:26:43', 'MDH4', null, 'MST4', 'MSTK123');
+-- insert into HoaDon values ('MHD5', '15:33:10', 'MDH5', null, 'MST5', 'MSTK123');
+-- delete from HoaDon where MaHoaDon = 'MHD1';
+-- delete from HoaDon where DuocThanhToanBoiTaiKhoan = 'MSTK0';
+-- delete from HoaDon where DuocThanhToanBoiTaiKhoan = 'MSTK123';
+-- delete from HoaDon;
+
+
+-- exec dbo.number_of_orders_of_each_customer_in_ascendingOrder 2;
+-- exec dbo.List_of_Customers_with_bonus_greater_than 0;
+
+-- select count(DiemThuong) from TaiKhoanKhachHang where DiemThuong = 0;
+-- select * from dbo.so_nguoi_co_diem_thuong_i(150);
+
+
+-- use assignment;
+-- use master;
+-- drop DATABASE assignment;
+-- select dbo.dem_so_don_hang_cua_khach_hang_co_ma_so('MSTK123');
+
+-- use assignment;
+-- exec dbo.number_of_orders_of_each_customer_in_ascendingOrder 0;
+-- exec dbo.number_of_orders_of_each_customer_in_ascendingOrder 2;
+-- exec dbo.List_of_Customers_with_bonus_greater_than 2;
+-- select dbo.dem_so_don_hang_cua_khach_hang_co_ma_so('MSTK123');
+-- create INDEX idx_MaSoTaiKhoan ON TaiKhoanKhachHang(MaSoTaiKhoan); 
+-- select * from TaiKhoanKhachHang T where T.MaSoTaiKhoan = 'MSTK123';
