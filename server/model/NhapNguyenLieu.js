@@ -3,8 +3,8 @@ const sql = require('mssql');
 const config = {
     user: 'sa',
     password: '123456',
-    server: 'LINH',
-    database: 'FastFood',
+    server: 'DESKTOP-638CP7D',
+    database: 'assignment',
     port: 1433,
     options: {
         encrypt: false,
@@ -42,6 +42,16 @@ async function getLoaiNL() {
         console.log(error);
     }
 }
+async function getNPP() {
+    try {
+        let pool = await sql.connect(config);
+        let products = await pool.request().query("SELECT DISTINCT TenNhaPhanPhoi,MaSoNhaPhanPhoi from NhaPhanPhoi ");
+        return products.recordsets;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
 async function getTienNL(data) {
     try {
         let pool = await sql.connect(config);
@@ -51,6 +61,18 @@ async function getTienNL(data) {
     }
     catch (error) {
         console.log(error);
+    }
+}
+async function getTotalNNP(data) {
+    try {
+        let pool = await sql.connect(config);
+        let query = "SELECT * FROM SoTienTraChoNhaCC('"+data.name+"')"
+        console.log(query);
+        let products = await pool.request().query(query);
+        return products.recordsets;
+    }
+    catch (error) {
+        console.log("NPP",error);
     }
 }
 async function func2(data) {
@@ -81,7 +103,8 @@ async function addProduct(product,fun) {
             // + product.DonGia +  "')" 
             query
             , (err, result) => {
-               if(err) fun(err,err.message)
+               if(err) {fun(err,err.message);
+            console.log(err[0]);}
                else fun(err,null)
             }
            );
@@ -135,6 +158,10 @@ module.exports = {
     getMNL: getMNL,
     getLoaiNL: getLoaiNL,
     getTienNL: getTienNL,
-    func2:func2
+    func2:func2,
+    getTotalNNP: getTotalNNP,
+    getNPP: getNPP
 }
+
+
 

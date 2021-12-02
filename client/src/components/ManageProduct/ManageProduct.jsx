@@ -176,7 +176,7 @@ function ManageProduct() {
     return (
         <div id="product">
 
-            <div class="mess" style={{ position: 'relative' }}>
+            <div class="mess" style={{ position: 'relative',zIndex:'20000' }}>
                 {mess !== 'Empty' && <Stack sx={{ width: '50%', position: 'fixed', top: '0' }} spacing={2}>
                     <Alert onClose={closeMess} severity="error">{mess}</Alert>
                 </Stack>}

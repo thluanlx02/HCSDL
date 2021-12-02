@@ -11,6 +11,14 @@ const requireProductList = callback =>{
       })
       .catch(error => console.log(error));
 };
+const getNPP = callback =>{
+  axios.get(url + 'get/NPP')
+    .then(res => {
+      const data = res.data;
+      callback(data);
+    })
+    .catch(error => console.log(error));
+};
 const requireManlList = callback =>{
   axios.get(url + 'get/manl')
     .then(res => {
@@ -32,6 +40,16 @@ const requireLoaiNLList = callback =>{
 const requiretTienNLList = (data,callback) =>{
   console.log("send data",data);
   axios.post(url + 'get/tienNL',data)
+    .then(res => {
+      const data = res.data;
+      console.log("get data:",data);
+      callback(data);
+    })
+    .catch(error => console.log(error));
+};
+const requiretTotalNPP = (data,callback) =>{
+  console.log("send data",data);
+  axios.post(url + 'get/getTotalNNP',data)
     .then(res => {
       const data = res.data;
       console.log("get data:",data);
@@ -171,6 +189,8 @@ export {
   requiretTienNLList,
   requireFunc2List,
   requireCus_Procedure1,
-  requireCus_Procedure2
+  requireCus_Procedure2,
+  requiretTotalNPP,
+  getNPP
 
 };

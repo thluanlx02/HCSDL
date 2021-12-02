@@ -18,6 +18,11 @@ module.exports = function (app) {
             response.json(data[0]);
         })
     })
+    app.get('/get/NPP', (request, response) => {
+        product.getNPP().then((data) => {
+            response.json(data[0]);
+        })
+    })
     app.post('/get/tienNL', (request, response) => {
         let order = { ...request.body }
         console.log("order",order);
@@ -31,6 +36,14 @@ module.exports = function (app) {
         console.log("order",order);
 
         product.func2(order).then((data) => {
+            response.json(data[0]);
+        })
+    })
+    app.post('/get/getTotalNNP', (request, response) => {
+        let order = { ...request.body }
+        console.log("order",order);
+
+        product.getTotalNNP(order).then((data) => {
             response.json(data[0]);
         })
     })

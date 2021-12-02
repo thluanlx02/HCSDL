@@ -210,6 +210,14 @@ CREATE TABLE NhaPhanPhoi
 )
 GO
 
+CREATE TABLE LoaiSanPhamNhaPhanPhoi(
+MaSoNhaPhanPhoi VARCHAR(15)  NOT NULL,
+LoaiSanPham VARCHAR(20) NOT NULL,
+CONSTRAINT PK_LoaiSanPhamNhaPhanPhoi PRIMARY KEY  (MaSoNhaPhanPhoi,LoaiSanPham), 
+CONSTRAINT FK_NhaPhanPhoi_LoaiSanPhamNhaPhanPhoi FOREIGN KEY (MaSoNhaPhanPhoi)
+        REFERENCES NhaPhanPHoi (MaSoNhaPhanPhoi)
+)
+
 CREATE TABLE NhaPhanPhoiCuaLanNhap
 (
   SoLo            INT         NOT NULL,
